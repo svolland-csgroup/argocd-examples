@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: dep1-deployment
+spec: 
+  serviceName: dep1-service
+  replicas: 2
+  selector: 
+    matchLabels: 
+      app: dep1-deployment
+  template: 
+    metadata: 
+      labels: 
+        app: dep1-deployment
+    spec:
+      containers:
+      - name: deployment
+        image: curlimages/curl
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Starting at $(date)"
+          sleep 20
+          echo "Live at $(date)"
+          touch /tmp/healthy
+          while true; do 
+            echo "Running at $(date)"
+            sleep 5
+          done
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 3
+          periodSeconds: 3

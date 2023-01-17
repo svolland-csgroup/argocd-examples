@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dep1-hook-job
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "10"
+    #"helm.sh/hook-delete-policy": hook-succeeded  
+spec:
+  template:         
+    metadata:
+      name: dep1-hook-job
+    spec:
+      containers:
+      - name: hook-job
+        image: curlimages/curl
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Hook started at $(date)"
+          sleep 10
+          echo "Hook Ended at $(date)"          
+      restartPolicy: OnFailure

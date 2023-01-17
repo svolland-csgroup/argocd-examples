@@ -1,0 +1,6 @@
+apiVersion: v2
+name: test-hook-wrapper
+type: application
+version: 0.0.1
+dependencies:
+  - name: test-hook-app
